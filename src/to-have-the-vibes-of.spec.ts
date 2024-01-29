@@ -17,6 +17,10 @@ describe("toHaveTheVibesOf", () => {
     expect("my string").toHaveTheVibesOf("mystring");
   });
 
+  it("should not match thin spaces to new lines", () => {
+    expect("my string").not.toHaveTheVibesOf("my\nstring");
+  });
+
   it("should match strings with simple spaces and wide spaces", () => {
     expect("my string").toHaveTheVibesOf("my string");
     //                ^ this is an EN space
@@ -50,7 +54,7 @@ describe("toHaveTheVibesOf", () => {
     expect("my‒string").toHaveTheVibesOf("my-string");
     //                ^ this is a figure dash.
     expect("my‑string").toHaveTheVibesOf("my-string");
-    //                ^ this is a non-breaking hypen.
+    //                ^ this is a non-breaking hyphen.
     expect("my―string").toHaveTheVibesOf("my-string");
     //                ^ this is a horizontal bar.
   });

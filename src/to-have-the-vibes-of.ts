@@ -1,23 +1,12 @@
 import dedent from "dedent";
-import { diff } from "jest-diff";
-
-const TINY_SPACES = /[   ]/g;
-const REGULAR_SPACES = / /g;
-
-function strip<Values extends string | string[]>(
-  value: Values,
-  regex: RegExp | RegExp[],
-): Values {
-  if (Array.isArray(value)) {
-    return value.map((str) => strip(str, regex)) as Values;
-  }
-
-  if (!Array.isArray(regex)) return value.replace(regex, "") as Values;
-
-  if (regex.length === 0) return value;
-
-  return strip(strip(value, regex.at(-1)), regex.slice(0, -1));
-}
+import { diff, diffStringsUnified } from "jest-diff";
+import { strip } from "./strip";
+import {
+  describeHorribleCharactersIn,
+  MATCH_TINY_SPACES,
+  matching,
+  THE_REGULAR_SPACE,
+} from "./library-of-horrible-characters";
 
 export function toHaveTheVibesOf(
   received: string,
@@ -25,7 +14,7 @@ export function toHaveTheVibesOf(
 ): jest.CustomMatcherResult {
   const [collapsedReceived, collapsedExpected] = strip(
     [received, expected],
-    TINY_SPACES,
+    [MATCH_TINY_SPACES, matching(THE_REGULAR_SPACE)],
   );
 
   const doesLookTheSameWhenIgnoringSmallOrInvisibleSpaces =
@@ -33,9 +22,21 @@ export function toHaveTheVibesOf(
 
   return {
     message(): string {
+      let why: string = "";
+      let aAnnotation = "Expected";
+      let bAnnotation = "Received";
+
+      if (!doesLookTheSameWhenIgnoringSmallOrInvisibleSpaces) {
+        why +=
+          "Thin space characters cannot be compared to large spaces or new lines as they are visually different when shown in a proportional font.";
+
+        aAnnotation += ` (${describeHorribleCharactersIn(expected).join(", ")})`;
+        bAnnotation += ` (${describeHorribleCharactersIn(received).join(", ")})`;
+      }
+
       return dedent`
-      Oh no
-      ${diff(expected, received)}
+        ${why}
+        ${diffStringsUnified(expected, received, { aAnnotation, bAnnotation, includeChangeCounts: true })}
       `;
     },
     pass: doesLookTheSameWhenIgnoringSmallOrInvisibleSpaces,
