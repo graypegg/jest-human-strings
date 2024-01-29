@@ -3,6 +3,7 @@ import { diff, diffStringsUnified } from "jest-diff";
 import { strip } from "./strip";
 import {
   describeHorribleCharactersIn,
+  MATCH_LARGE_SPACES,
   MATCH_TINY_SPACES,
   matching,
   THE_REGULAR_SPACE,
@@ -14,10 +15,10 @@ export function toHaveTheVibesOf(
 ): jest.CustomMatcherResult {
   const [collapsedReceived, collapsedExpected] = strip(
     [received, expected],
-    [MATCH_TINY_SPACES, matching(THE_REGULAR_SPACE)],
+    [MATCH_TINY_SPACES, matching(THE_REGULAR_SPACE), MATCH_LARGE_SPACES],
   );
 
-  const doesLookTheSameWhenIgnoringSmallOrInvisibleSpaces =
+  const doesMatchByCollapsingSpaceCharacters =
     collapsedReceived === collapsedExpected;
 
   return {
@@ -26,7 +27,7 @@ export function toHaveTheVibesOf(
       let aAnnotation = "Expected";
       let bAnnotation = "Received";
 
-      if (!doesLookTheSameWhenIgnoringSmallOrInvisibleSpaces) {
+      if (!doesMatchByCollapsingSpaceCharacters) {
         why +=
           "Thin space characters cannot be compared to large spaces or new lines as they are visually different when shown in a proportional font.";
 
@@ -39,7 +40,7 @@ export function toHaveTheVibesOf(
         ${diffStringsUnified(expected, received, { aAnnotation, bAnnotation, includeChangeCounts: true })}
       `;
     },
-    pass: doesLookTheSameWhenIgnoringSmallOrInvisibleSpaces,
+    pass: doesMatchByCollapsingSpaceCharacters,
   };
 }
 
