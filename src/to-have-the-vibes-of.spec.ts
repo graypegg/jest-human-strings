@@ -3,7 +3,7 @@ import { toHaveTheVibesOf } from "./to-have-the-vibes-of";
 expect.extend({ toHaveTheVibesOf });
 
 describe("toHaveTheVibesOf", () => {
-  it("should match strings with simple spaces and thin spaces or no space at all", () => {
+  it("should match strings with regular spaces and thin spaces or no space at all", () => {
     // Thin space
     expect("my string").toHaveTheVibesOf("my string");
     expect("my string").toHaveTheVibesOf("mystring");
@@ -11,17 +11,18 @@ describe("toHaveTheVibesOf", () => {
     // Hairline space
     expect("my string").toHaveTheVibesOf("my string");
     expect("my string").toHaveTheVibesOf("mystring");
+  });
 
-    // Punctuation space
+  it("should treat the punctuation space like a regular space", () => {
     expect("my string").toHaveTheVibesOf("my string");
-    expect("my string").toHaveTheVibesOf("mystring");
+    expect("my string").not.toHaveTheVibesOf("mystring");
   });
 
   it("should not match thin spaces to new lines", () => {
     expect("my string").not.toHaveTheVibesOf("my\nstring");
   });
 
-  it("should match strings with simple spaces and wide spaces", () => {
+  it("should match strings with regular spaces and wide spaces", () => {
     expect("my string").toHaveTheVibesOf("my string");
     //                ^ this is an EN space
     expect("my string").toHaveTheVibesOf("my string");

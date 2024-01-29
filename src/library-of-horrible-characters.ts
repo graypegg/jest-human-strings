@@ -8,7 +8,6 @@ export const EN_QUAD_SPACE = " ";
 export const EM_QUAD_SPACE = " ";
 export const FIGURE_SPACE = " ";
 export const NARROW_NON_BREAKING_SPACE = " ";
-export const NON_BREAKING_SPACE = " ";
 export const EN_DASH = "–";
 export const EM_DASH = "—";
 export const FIGURE_DASH = "‒";
@@ -16,6 +15,7 @@ export const NON_BREAKING_HYPHEN = "‑";
 export const HORIZONTAL_LINE = "―";
 
 export const HORRIBLE_CHARACTERS = {
+  THE_REGULAR_SPACE,
   THIN_SPACE,
   HAIRLINE_SPACE,
   PUNCTUATION_SPACE,
@@ -25,7 +25,6 @@ export const HORRIBLE_CHARACTERS = {
   EM_QUAD_SPACE,
   FIGURE_SPACE,
   NARROW_NON_BREAKING_SPACE,
-  NON_BREAKING_SPACE,
   EN_DASH,
   EM_DASH,
   FIGURE_DASH,
@@ -49,10 +48,14 @@ export function describeHorribleCharactersIn(str: string): string[] {
     );
 }
 
-export const MATCH_TINY_SPACES = matching([
-  THIN_SPACE,
+export const MATCH_SMALL_TO_TINY_SPACES = matching([
   HAIRLINE_SPACE,
-  PUNCTUATION_SPACE,
+  THIN_SPACE,
+  NARROW_NON_BREAKING_SPACE,
+]);
+
+export const MATCH_SMALL_SPACES = matching([
+  THIN_SPACE,
   NARROW_NON_BREAKING_SPACE,
 ]);
 
@@ -61,5 +64,10 @@ export const MATCH_LARGE_SPACES = matching([
   EM_SPACE,
   EN_QUAD_SPACE,
   EM_QUAD_SPACE,
+  FIGURE_SPACE,
+]);
+
+export const MATCH_THE_LINE_BREAK_STOPPER_SPACES = matching([
+  NARROW_NON_BREAKING_SPACE,
   FIGURE_SPACE,
 ]);
