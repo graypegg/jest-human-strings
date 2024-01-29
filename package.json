@@ -1,0 +1,20 @@
+{
+  "name": "jest-human-strings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "module": "dist/main.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "test",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.9.6",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
